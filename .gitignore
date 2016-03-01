@@ -9,7 +9,7 @@
 *.vi
 *~
 *.sass-cache
- 
+
 # OS or Editor folders
 .DS_Store
 Thumbs.db
@@ -23,7 +23,7 @@ nbproject
 *.sublime-workspace
 
 # Development configuration file
-src/config/config.development.js
+# src/config/config.development.js
 
 # Back up from MySQLWorkbench
 *.bak
