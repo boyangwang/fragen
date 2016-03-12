@@ -15,6 +15,7 @@ var passport = require('passport')
 var magicModuleId = 1; // cs1231
 
 app.set('view engine', 'ejs');
+app.set('views', __dirname + '/views');
 app.use("/public", express.static(__dirname + '/public'));
 app.use(express.bodyParser());
 app.use(parseCookie = express.cookieParser(config.SECRET_KEY));
