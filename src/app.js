@@ -39,11 +39,13 @@ passport.use(new GoogleStrategy({
 }, function(token, refreshToken, profile, done) {
 	console.log('in strategy', profile, token);
 	process.nextTick(function() {
-		var usr = { accessToken: token,
+		var user = { accessToken: token,
 			refreshToken: refreshToken,
-			id: profile.id, username: profile.displayName, displayName: profile.displayName
+			id: profile.id, username: profile.displayName,
+			profilePic: profile.photos && profile.photos[0] && profile.photos[0].value,
+			email: profile.emails && profile.emails[0] && profile.emails[0].value
 		};
-		return done(null, usr);
+		return done(null, user);
 	});
 }));
 
