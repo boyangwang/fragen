@@ -67,36 +67,19 @@ app.get("/about", function(req, res) {
 app.get('/masterArr', function(req, res) {
 	res.json(masterArr);
 });
-app.get('/auth/facebook/callback',
-		passport.authenticate('facebook', {failureRedirect: '/loginError'}),
-function(req, res) {
-	// Successful authentication, redirect home.
-	console.log("Auth success!");
-	//access sessionID and user after login success
-	// console.log(req.sessionID);
-	console.log(req.session.passport); //retrieve passport's user ID
-	picurl = '';
 
-	// retrieve user fbpic url
-	graph.setAccessToken(req.session.passport.user.accessToken);
-	var query = "SELECT pic_big FROM user WHERE uid=me()";
-	graph.fql(query, function(err, fdata) {
-		console.log(fdata.data[0].pic_big);
-		picurl = fdata.data[0].pic_big; // { picture: 'http://profile.ak.fbcdn.net/'... }
-
-		console.log(req.session.passport.user.id)
-
-		//here need to check and create user
-		db.updateUserInfo(req.session.passport.user.id, req.session.passport.user.username, picurl, req.session.passport.user.displayName, function() {
-			graph.setAccessToken(null);
-			res.redirect('/dashboard');
-		});
-	});
-
-});
 app.get('/auth/google',
 	passport.authenticate('google', { scope : ['profile', 'email'] }),
 	routes.postAuthenticate);
+app.get('/auth/google/callback',
+	passport.authenticate('google', {failureRedirect: '/loginError'}),
+	function(req, res) {
+		console.log("Auth success!");
+		console.log('req.session.passport', req.session.passport);
+		db.updateUserInfo(req.session.passport.user.id, req.session.passport.user.username, req.session.passport.user.profilePic, req.session.passport.user.displayName, function() {
+			res.redirect('/dashboard');
+		});
+	});
 app.get('/loginError', routes.loginError);
 app.get('/signout', routes.logout);
 
@@ -107,7 +90,6 @@ app.get('/dashboard', ensureAuthenticated,
 	}
 );
 
-// Test Open Graph Story
 app.get('/question/:questionId', function(req, res) {
 	var qn = masterArr.findPost(req.params.questionId);
 	if (qn && qn.type == 0) {
@@ -127,16 +109,17 @@ app.get("/question/data/:questionId", function(req, res) {
 // need to pass in :moduleCode as magic
 app.get('/modules/:moduleTitle', ensureAuthenticated, function(req, res) {
 	db.getUserInfo(req.user.id, function(db_user) {
+		console.log("DB_USER: " + db_user[0]);
 		db.getModuleByTitle(req.params.moduleTitle,
-				function(result) {
-					console.log("DB_USER: " + db_user[0]);
-					if (result.length && result[0]) {
-						res.render('socketBoard', {user: req.user, moduleid: result[0].id, module: result[0], fbpic: db_user[0].fbpic_url});
+			function(result) {
+				if (result.length && result[0]) {
+					res.render('socketBoard', {user: req.user, moduleid: result[0].id, module: result[0], fbpic: db_user[0].fbpic_url});
 
-					} else {
-						res.redirect('/dashboard');
-					}
-				})
+				} else {
+					res.redirect('/dashboard');
+				}
+			}
+		);
 	});
 });
 
@@ -238,8 +221,6 @@ io.sockets.on("connection", function(socket) { //general handler for all socket 
 			// 				username: 'yos.riady',
 			// 				displayName: 'Yos Riady' }
 
-			user_cookie.id = parseInt(user_cookie.id);
-
 			// side track a little. Here we retrieve all the votes from this
 			// specific user. It needs to be here because we need id
 			db.getVotes(user_cookie.id, function(data) {
@@ -293,19 +274,6 @@ io.sockets.on("connection", function(socket) { //general handler for all socket 
 	socket.on("post", function(data) {
 		db.addQuestion(socket.user_cookie.id, data.title, data.content, data.module_id, data.anon, function(id) {
 			// Post OG story from server as the ID is only known at this point, not on the client side.
-			if (!data.anon) {
-				graph.setAccessToken(socket.user_cookie.accessToken);
-				graph.post('me/fragen-ask:ask',
-						{
-							question: "http://fragen.cmq.me/question/" + id,
-							privacy: {'value': 'ALL_FRIENDS'}
-						},
-				function(err, res) {
-					graph.setAccessToken(null);
-					console.log(res);
-				}
-				);
-			}
 			db.getQuestion(id, function(results) {
 				if (results[0]) {
 					masterArr.push(results[0]);
