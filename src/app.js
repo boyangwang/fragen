@@ -67,9 +67,6 @@ app.get("/about", function(req, res) {
 app.get('/masterArr', function(req, res) {
 	res.json(masterArr);
 });
-app.get('/auth/facebook',
-		passport.authenticate('facebook', {scope: config.FB_EXTENDED_PERMISSION}),
-routes.postAuthenticate);
 app.get('/auth/facebook/callback',
 		passport.authenticate('facebook', {failureRedirect: '/loginError'}),
 function(req, res) {
@@ -97,6 +94,9 @@ function(req, res) {
 	});
 
 });
+app.get('/auth/google',
+	passport.authenticate('google', { scope : ['profile', 'email'] }),
+	routes.postAuthenticate);
 app.get('/loginError', routes.loginError);
 app.get('/signout', routes.logout);
 
