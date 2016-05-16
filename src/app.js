@@ -198,7 +198,6 @@ masterArr.findPost = function(id) {
 // Init db
 // Retrieve posts from mysql db and push to masterArr
 
-
 var db_limit = 65535; // How many qns do you want in one page?
 var db_offset = 0; // TODO: multipage thingy
 
