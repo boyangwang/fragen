@@ -28,40 +28,25 @@ app.use(passport.session());
 passport.serializeUser(function(user, done) {
 	done(null, user);
 });
-
 passport.deserializeUser(function(obj, done) {
 	done(null, obj);
 });
 
-passport.use(new FacebookStrategy({
-	clientID: config.FACEBOOK_APP_ID,
-	clientSecret: config.FACEBOOK_APP_SECRET,
-	callbackURL: config.FBAUTH_CALLBACK_URL
-},
-function(accessToken, refreshToken, profile, done) {
+passport.use(new GoogleStrategy({
+	clientID        : '772185317189-6u8bu11pq5fhtsk0mce64hte3kspr9ah.apps.googleusercontent.com',
+	clientSecret    : 'Gz3tJNU88OBKJFaR7ddhh6KZ',
+	callbackURL     : config.AUTH_CALLBACK_URL,
+}, function(token, refreshToken, profile, done) {
+	console.log('in strategy', profile, token);
 	process.nextTick(function() {
-		console.log(profile);
-		var usr = {accessToken:accessToken, refreshToken:refreshToken, id: profile.id, username: profile.username, displayName: profile.displayName}
-
-		//graph.setAccessToken(accessToken);
-		// console.log(user);
+		var usr = { accessToken: token,
+			refreshToken: refreshToken,
+			id: profile.id, username: profile.displayName, displayName: profile.displayName
+		};
 		return done(null, usr);
 	});
-}
-));
+}));
 
-
-var collectionURL = 'https://www.facebook.com/me/app_492242497533605';
-(function() {
-	var params = {fields: 'profile_section_url'};
-	graph.get(config.FACEBOOK_APP_ID, params, function(err, res) {
-		// to be enabled when collection has been approved
-		//collectionURL = res.profile_section_url;
-	})
-})();
-
-
-// Wrapper auth function
 function ensureAuthenticated(req, res, next) {
 	if (req.isAuthenticated()) {
 		return next();
