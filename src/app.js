@@ -1,6 +1,5 @@
 var express = require("express");
 var connect = require('connect')
-var graph = require('fbgraph');
 var app = express();
 var server = require("http").createServer(app);
 var io = require("socket.io").listen(server);
@@ -10,8 +9,7 @@ var config = require("./config/config.js");
 var cookie = require('cookie');
 var store = new express.session.MemoryStore();
 var passport = require('passport')
-		, FacebookStrategy = require('passport-facebook').Strategy;
-
+var GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;
 var magicModuleId = 1; // cs1231
 
 app.set('view engine', 'ejs');
