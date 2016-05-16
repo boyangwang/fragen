@@ -64,8 +64,6 @@ app.get("/terms", function(req, res) {
 app.get("/about", function(req, res) {
 	res.render('about')
 });
-
-//app.get("/main", ensureAuthenticated, routes.main);
 app.get('/masterArr', function(req, res) {
 	res.json(masterArr);
 });
