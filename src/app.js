@@ -103,7 +103,7 @@ app.get('/signout', routes.logout);
 app.get('/dashboard', ensureAuthenticated,
 	function(req, res) {
 		console.log('in dashboard, req.user: ', req.user);
-		res.render('dashboard', {user: req.user, fbpic: '', collectionURL: ''});
+		res.render('dashboard', {user: req.user, fbpic: req.user.profilePic, collectionURL: ''});
 	}
 );
 
