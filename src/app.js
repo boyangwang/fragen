@@ -101,13 +101,10 @@ app.get('/loginError', routes.loginError);
 app.get('/signout', routes.logout);
 
 app.get('/dashboard', ensureAuthenticated,
-		function(req, res) {
-			db.getUserInfo(req.user.id,
-					function(db_user) {
-						res.render('dashboard', {user: req.user, fbpic: db_user[0].fbpic_url, collectionURL: collectionURL});
-					}
-			)
-		}
+	function(req, res) {
+		console.log('in dashboard, req.user: ', req.user);
+		res.render('dashboard', {user: req.user, fbpic: '', collectionURL: ''});
+	}
 );
 
 // Test Open Graph Story
