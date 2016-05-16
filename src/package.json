@@ -1,31 +1,23 @@
 {
-  "name": "laughing-avenger",
-  "version": "0.0.0",
-  "description": "CS3216 Facebook Application",
+  "name": "fragen",
+  "version": "0.1.0",
+  "description": "",
   "main": "app.js",
   "dependencies": {
-    "express": "~3.3.1",
-    "mysql": "~2.0.0-alpha8",
-    "socket.io": "~0.9.16",
-    "ejs":"0.8.x",
-    "fbgraph":"0.2.7",
-    "passport":"0.1.x",
-    "passport-facebook":"1.0.0",
-    "passport-http": "*",
-    "connect":"2.8.5",
-    "cookie":"0.1.0"
+    "express": "*",
+    "mysql": "*",
+    "socket.io": "*",
+    "ejs":"*",
+    "passport":"*",
+    "passport-local":"*",
+    "passport-google-oauth":"*",
+    "connect":"*",
+    "cookie":"*"
   },
   "devDependencies": {},
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/BenMQ/laughing-avenger.git"
-  },
   "author": "",
-  "license": "BSD",
-  "bugs": {
-    "url": "https://github.com/BenMQ/laughing-avenger/issues"
-  }
+  "license": "BSD"
 }
