@@ -19,6 +19,7 @@ SET time_zone = "+00:00";
 --
 -- Database: `laughing_avenger`
 --
+DROP DATABASE IF EXISTS `laughing_avenger`;
 CREATE DATABASE IF NOT EXISTS `laughing_avenger` DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;
 USE `laughing_avenger`;
 
