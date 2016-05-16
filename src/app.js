@@ -41,7 +41,7 @@ passport.use(new GoogleStrategy({
 	process.nextTick(function() {
 		var user = { accessToken: token,
 			refreshToken: refreshToken,
-			id: profile.id, username: profile.displayName,
+			id: profile.id, username: profile.displayName, displayName: profile.displayName,
 			profilePic: profile.photos && profile.photos[0] && profile.photos[0].value,
 			email: profile.emails && profile.emails[0] && profile.emails[0].value
 		};
