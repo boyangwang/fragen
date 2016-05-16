@@ -31,7 +31,7 @@ USE `laughing_avenger`;
 
 CREATE TABLE IF NOT EXISTS `comment` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `user_id` bigint(20) unsigned NOT NULL,
+  `user_id` varchar(255) NOT NULL,
   `post_id` int(10) unsigned NOT NULL,
   `content` text NOT NULL,
   `timestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
@@ -55,7 +55,7 @@ INSERT INTO `comment` (`id`, `user_id`, `post_id`, `content`, `timestamp`, `anon
 --
 
 CREATE TABLE IF NOT EXISTS `enrollment` (
-  `user_id` bigint(20) unsigned NOT NULL,
+  `user_id` varchar(255) NOT NULL,
   `module_id` int(10) unsigned NOT NULL,
   `is_manager` tinyint(4) NOT NULL DEFAULT '0' COMMENT '0 for normal enrollment, 1 for manager',
   PRIMARY KEY (`user_id`,`module_id`),
@@ -97,7 +97,7 @@ CREATE TABLE IF NOT EXISTS `post` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT 'the primary key\n',
   `title` varchar(255) NOT NULL,
   `content` text,
-  `owner_id` bigint(20) unsigned NOT NULL COMMENT 'ID of the user that posted this',
+  `owner_id` varchar(255) NOT NULL COMMENT 'ID of the user that posted this',
   `type` int(11) NOT NULL COMMENT '0 for question, 1 for answer',
   `parent_id` int(10) unsigned DEFAULT NULL COMMENT 'NULL for question, id of parent question for answers',
   `timestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT 'time created',
@@ -130,7 +130,7 @@ INSERT INTO `post` (`id`, `title`, `content`, `owner_id`, `type`, `parent_id`, `
 --
 
 CREATE TABLE IF NOT EXISTS `user` (
-  `user_id` bigint(20) unsigned NOT NULL COMMENT 'fbid of the user',
+  `user_id` varchar(255) NOT NULL COMMENT 'fbid of the user',
   `fb_username` varchar(100) DEFAULT NULL,
   `fbpic_url` varchar(255) DEFAULT NULL,
   `name` varchar(100) DEFAULT NULL,
@@ -142,9 +142,9 @@ CREATE TABLE IF NOT EXISTS `user` (
 --
 
 INSERT INTO `user` (`user_id`, `fb_username`, `fbpic_url`, `name`) VALUES
-(620676394, 'li.guangda', 'https://fbcdn-profile-a.akamaihd.net/hprofile-ak-ash3/t5/41553_620676394_6161_n.jpg', 'Li GuangDa'),
-(100000710245275, 'muhammad.muneer.71', 'https://fbcdn-profile-a.akamaihd.net/hprofile-ak-ash1/t5/371719_100000710245275_2022401136_n.jpg', 'Muhammad Muneer'),
-(100001375167765, 'boyang.wang.372', 'https://fbcdn-profile-a.akamaihd.net/hprofile-ak-ash1/t5/211597_100001375167765_701200099_n.jpg', 'Boyang Wang');
+('620676394', 'li.guangda', 'https://fbcdn-profile-a.akamaihd.net/hprofile-ak-ash3/t5/41553_620676394_6161_n.jpg', 'Li GuangDa'),
+('100000710245275', 'muhammad.muneer.71', 'https://fbcdn-profile-a.akamaihd.net/hprofile-ak-ash1/t5/371719_100000710245275_2022401136_n.jpg', 'Muhammad Muneer'),
+('100001375167765', 'boyang.wang.372', 'https://fbcdn-profile-a.akamaihd.net/hprofile-ak-ash1/t5/211597_100001375167765_701200099_n.jpg', 'Boyang Wang');
 
 -- --------------------------------------------------------
 
@@ -153,7 +153,7 @@ INSERT INTO `user` (`user_id`, `fb_username`, `fbpic_url`, `name`) VALUES
 --
 
 CREATE TABLE IF NOT EXISTS `vote` (
-  `user_id` bigint(20) unsigned NOT NULL,
+  `user_id` varchar(255) NOT NULL,
   `post_id` int(10) unsigned NOT NULL,
   `type` tinyint(4) DEFAULT NULL COMMENT '1 for upvote, -1 for downvote',
   PRIMARY KEY (`user_id`,`post_id`),
