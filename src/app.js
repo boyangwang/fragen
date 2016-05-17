@@ -2,25 +2,25 @@ var express = require("express");
 var connect = require('connect')
 var app = express();
 var server = require("http").createServer(app);
-var io = require("socket.io").listen(server);
 var routes = require('./routes');
 var db = require('./database.api.js');
 var config = require("./config/config.js");
 var cookie = require('cookie');
-var store = new require('express-session').MemoryStore();
+var expressSession = require('express-session');
+var store = new expressSession.MemoryStore();
 var passport = require('passport')
 var GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;
 var magicModuleId = 1; // cs1231
-var bodyParser = require('body-parser')
-
+var bodyParser = require('body-parser');
+var cookieParser = require('cookie-parser');
 
 app.set('view engine', 'ejs');
 app.set('views', __dirname + '/views');
 app.use("/public", express.static(__dirname + '/public'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
-app.use(parseCookie = require('cookie-parser')(config.SECRET_KEY));
-app.use(require('express-session')({
+app.use(parseCookie = cookieParser(config.SECRET_KEY));
+app.use(expressSession({
 	secret: config.SECRET_KEY,
 	key: config.AUTH_COOKIE_NAME, //session key for user auth cookie
 	store: store,
@@ -119,7 +119,6 @@ app.get('/modules/:moduleTitle', ensureAuthenticated, function(req, res) {
 			function(result) {
 				if (result.length && result[0]) {
 					res.render('socketBoard', {user: req.user, moduleid: result[0].id, module: result[0], fbpic: db_user[0].fbpic_url});
-
 				} else {
 					res.redirect('/dashboard');
 				}
@@ -202,13 +201,13 @@ db.getAllQuestions(function(results) {
 // For server side, emit sender and handler almost always together
 // The flow is: 1. Received emit from client 2. Push to masterArr
 //				3. Store to db 4. emit a signal to all client
-
-io.sockets.on("connection", function(socket) { //general handler for all socket connection events
+var io = require("socket.io")(server);
+io.on("connection", function(socket) { //general handler for all socket connection events
 	console.log('socket connected!')
 	var cookies = cookie.parse(socket.handshake.headers.cookie);
 
 	//console.log(cookies['express.sid']);
-	var session_id = connect.utils.parseSignedCookie(
+	var session_id = cookieParser.signedCookie(
 			cookies[config.AUTH_COOKIE_NAME], config.SECRET_KEY)
 
 	console.log("parsed session_id:" + session_id);
@@ -219,8 +218,7 @@ io.sockets.on("connection", function(socket) { //general handler for all socket 
 
 		if (session) {
 			var user_cookie = session.passport.user;
-			//console.log(user_cookie);
-
+			console.log("USER COOKIE", user_cookie);
 			// Example:
 			// user_cookie = { id: '100003334235610',
 			// 				username: 'yos.riady',
@@ -232,8 +230,6 @@ io.sockets.on("connection", function(socket) { //general handler for all socket 
 				socket.emit('userVotes', data);
 			});
 
-			console.log("USER COOKIE");
-			console.log(user_cookie);
 			socket.user_cookie = user_cookie; //attach cookie to socket object
 		}
 	});
@@ -342,6 +338,7 @@ io.sockets.on("connection", function(socket) { //general handler for all socket 
 		});
 	});
 
+	console.log('hand shake done');
 });
 
 server.listen(config.port);
