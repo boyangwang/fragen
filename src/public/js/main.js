@@ -30,8 +30,8 @@ $(document).ready(function() {
 			$(".answerDiv", e).tsort('.ansVoteDiv span.votes', {order: 'desc'}, {order: 'desc', attr: 'data-timestamp'});
 		});
 	});
-	
-	
+
+
 
 	$("#qnSubmit.newPostBtn").click(masterSubmit)
 							 .qtip({
@@ -39,11 +39,11 @@ $(document).ready(function() {
 								style	: {classes: 'qtip-light'},
 								position: {my: "bottom left", at: "top right"},
 							 });
-	
+
 	$("#anonymousSwitch").click(switchAnon);
-	
+
 	$("#title-view, #ans-view").keydown(ctrl_enter_send);
-	
+
 	$("button.sortByTime").click(evtSortByTime);
 	$("button.sortByVotes").click(evtSortByVotes);
 
@@ -150,7 +150,7 @@ function initVotes(data) {
 
 // init socket
 //like a persistent tube between client and server on directory '/'
-window.socket = io.connect(":4321/");
+window.socket = io();
 
 function displayComment(data, container, blink) {
 	console.log("anon comment");
