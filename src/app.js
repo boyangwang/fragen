@@ -7,20 +7,25 @@ var routes = require('./routes');
 var db = require('./database.api.js');
 var config = require("./config/config.js");
 var cookie = require('cookie');
-var store = new express.session.MemoryStore();
+var store = new require('express-session').MemoryStore();
 var passport = require('passport')
 var GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;
 var magicModuleId = 1; // cs1231
+var bodyParser = require('body-parser')
+
 
 app.set('view engine', 'ejs');
 app.set('views', __dirname + '/views');
 app.use("/public", express.static(__dirname + '/public'));
-app.use(express.bodyParser());
-app.use(parseCookie = express.cookieParser(config.SECRET_KEY));
-app.use(express.session({
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(parseCookie = require('cookie-parser')(config.SECRET_KEY));
+app.use(require('express-session')({
 	secret: config.SECRET_KEY,
 	key: config.AUTH_COOKIE_NAME, //session key for user auth cookie
 	store: store,
+	resave: false,
+	saveUninitialized: true
 }));
 app.use(passport.initialize());
 app.use(passport.session());

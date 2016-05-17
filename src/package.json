@@ -12,7 +12,10 @@
     "passport-local":"*",
     "passport-google-oauth":"*",
     "connect":"*",
-    "cookie":"*"
+    "cookie":"*",
+    "body-parser":"*",
+    "cookie-parser":"*",
+    "express-session":"*"
   },
   "devDependencies": {},
   "scripts": {
