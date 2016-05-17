@@ -150,7 +150,7 @@ function initVotes(data) {
 
 // init socket
 //like a persistent tube between client and server on directory '/'
-window.socket = io();
+window.socket = io(':4321/');
 
 function displayComment(data, container, blink) {
 	console.log("anon comment");
