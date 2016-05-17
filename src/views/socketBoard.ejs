@@ -1,7 +1,7 @@
 <html xmlns:fb="http://ogp.me/ns/fb#">
 <head>
     <!--content determined dynamically-->
-    <title><%=: module.title %> | Ask and Learn</title>
+    <title><%= module.title %> | Ask and Learn</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta charset='utf-8' />
 
@@ -22,14 +22,6 @@
 <body>
 <!-- Load Facebook JS SDK -->
 <div id="fb-root"></div>
-<script>(function(d, s, id) {
-var js, fjs = d.getElementsByTagName(s)[0];
-if (d.getElementById(id)) return;
-js = d.createElement(s); js.id = id;
-js.src = "//connect.facebook.net/en_GB/all.js#xfbml=1&appId=492242497533605";
-fjs.parentNode.insertBefore(js, fjs);
-}(document, 'script', 'facebook-jssdk'));</script>
-
     <header id='nav-pane'>
         <nav class="navbar navbar-default navbar-fixed-top" id='navpane' role="navigation">
             <div class="container nav-container">
@@ -62,8 +54,8 @@ fjs.parentNode.insertBefore(js, fjs);
     </header>
     <div id="content">
         <div id="mod-desc">
-            <h1 id='mod-name'><%=: module.title %></h1> <!--content determined dynamically-->
-            <h3 id='mod-title'><%=: module.description %></h3>
+            <h1 id='mod-name'><%= module.title %></h1> <!--content determined dynamically-->
+            <h3 id='mod-title'><%= module.description %></h3>
         </div>
         <div class='row' id='wrapper'>
 
