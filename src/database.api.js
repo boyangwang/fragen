@@ -28,7 +28,7 @@ self.init = function(config) {
 __query = function(query, next) {
 	pool.getConnection(function(err, connection) {
 		connection.query(query, function(err, result) {
-			connection.end();
+			connection.release();
 			if (err) throw err;
 			next(result);
 		});
@@ -38,7 +38,7 @@ __query = function(query, next) {
 __insertQuery = function(query, values, next) {
 	pool.getConnection(function(err, connection){
 		connection.query(query, values, function(err, result) {
-			connection.end();
+			connection.release();
 			if (err) throw err;
 			next(result.insertId);
 		});
